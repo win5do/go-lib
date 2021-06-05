@@ -4,8 +4,6 @@ import (
 	"go/ast"
 	goparser "go/parser"
 	"go/token"
-	"os"
-	"path/filepath"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -21,7 +19,11 @@ func TestParseFunc(t *testing.T) {
 	src := `
 package test
 
-func bar(a, b, c int) int {
+import (
+	"go.uber.org/zap"
+)
+
+func bar(a, b, c int) *zap.SugaredLogger {
 	x := 1
 	x = s.Info(a, b, c)
 	return x
@@ -32,7 +34,7 @@ func bar(a, b, c int) int {
 	require.NoError(t, err)
 	err = ast.Print(fset, r)
 	require.NoError(t, err)
-	body := r.Decls[0].(*ast.FuncDecl).Body.List[0]
+	body := r.Decls[1].(*ast.FuncDecl).Body.List[0]
 	err = ast.Print(fset, body)
 	require.NoError(t, err)
 }
@@ -46,8 +48,15 @@ func TestParseExpr(t *testing.T) {
 }
 
 func TestWalkAst(t *testing.T) {
-	f, err := goparser.ParseFile(token.NewFileSet(), filepath.Join(os.Getenv("GOPATH"), "/pkg/mod/go.uber.org/zap@v1.10.0/sugar.go"), nil, goparser.Mode(0))
+	dir, err := getImportPkg("go.uber.org/zap")
 	require.NoError(t, err)
-	_, err = walkAst(f)
+
+	tset := token.NewFileSet()
+	pkg, err := parseDir(tset, dir, "zap")
+	require.NoError(t, err)
+
+	v := &visitor{}
+	ast.Walk(v, pkg)
+	err = ast.Print(tset, v.funcs)
 	require.NoError(t, err)
 }

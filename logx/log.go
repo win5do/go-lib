@@ -11,12 +11,6 @@ import (
 
 //go:generate sh -c "go run ./generator >zap_sugar_generated.go"
 
-// alias
-type (
-	Logger        = zap.Logger
-	SugaredLogger = zap.SugaredLogger
-)
-
 var (
 	_globalL = NewLogger(zapcore.InfoLevel)
 	_globalS = _globalL.Sugar()
@@ -24,19 +18,19 @@ var (
 
 const skip = 1
 
-func SetLogger(l *Logger) {
+func SetLogger(l *zap.Logger) {
 	lPtr := (*unsafe.Pointer)(unsafe.Pointer(&_globalL))
 	atomic.StorePointer(lPtr, unsafe.Pointer(l))
 	sPtr := (*unsafe.Pointer)(unsafe.Pointer(&_globalS))
 	atomic.StorePointer(sPtr, unsafe.Pointer(l.Sugar()))
 }
 
-func GetLogger() *Logger {
+func GetLogger() *zap.Logger {
 	l := _globalL
 	return l.WithOptions(zap.AddCallerSkip(-skip)) // unwrap
 }
 
-func NewLogger(lv zapcore.Level) *Logger {
+func NewLogger(lv zapcore.Level) *zap.Logger {
 	var zapConfig zap.Config
 
 	switch lv {

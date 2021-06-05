@@ -22,6 +22,10 @@ func SetFlag(b bool) {
 }
 
 func WithStackOnce(err error) error {
+	if err == nil {
+		return err
+	}
+
 	if stackFlag == 0 {
 		return err
 	}
