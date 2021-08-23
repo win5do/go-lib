@@ -165,7 +165,7 @@ func rewriteFunc(fn *ast.FuncDecl) *ast.FuncDecl {
 		}
 	}
 
-	exprStr := fmt.Sprintf(`_globalS.%s(%s)`, fnName, strings.Join(args, ","))
+	exprStr := fmt.Sprintf(`getSugarLogger().%s(%s)`, fnName, strings.Join(args, ","))
 	expr, err := goparser.ParseExpr(exprStr)
 	if err != nil {
 		panic(err)

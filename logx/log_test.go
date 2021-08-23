@@ -2,6 +2,7 @@ package logx_test
 
 import (
 	"testing"
+	"time"
 
 	"go.uber.org/zap/zapcore"
 
@@ -15,4 +16,24 @@ func TestLog(t *testing.T) {
 	l := log.GetLogger().Sugar()
 	l.Debug("debug")
 	l.Info("info")
+}
+
+func TestDataRace(t *testing.T) {
+	go func() {
+		for {
+			log.Debug("debug")
+			time.Sleep(10 * time.Millisecond)
+		}
+	}()
+
+	cancel := time.After(1 * time.Second)
+	for {
+		select {
+		case <-cancel:
+			return
+		default:
+			log.SetLogger(log.NewLogger(zapcore.DebugLevel))
+			time.Sleep(30 * time.Millisecond)
+		}
+	}
 }

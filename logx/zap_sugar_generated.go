@@ -6,101 +6,101 @@ import (
 )
 
 func Desugar() *zap.Logger {
-	return _globalS.Desugar()
+	return getSugarLogger().Desugar()
 }
 
 func Named(name string) *zap.SugaredLogger {
-	return _globalS.Named(name)
+	return getSugarLogger().Named(name)
 }
 
 func With(args ...interface{}) *zap.SugaredLogger {
-	return _globalS.With(args...)
+	return getSugarLogger().With(args...)
 }
 
 func Debug(args ...interface{}) {
-	_globalS.Debug(args...)
+	getSugarLogger().Debug(args...)
 }
 
 func Info(args ...interface{}) {
-	_globalS.Info(args...)
+	getSugarLogger().Info(args...)
 }
 
 func Warn(args ...interface{}) {
-	_globalS.Warn(args...)
+	getSugarLogger().Warn(args...)
 }
 
 func Error(args ...interface{}) {
-	_globalS.Error(args...)
+	getSugarLogger().Error(args...)
 }
 
 func DPanic(args ...interface{}) {
-	_globalS.DPanic(args...)
+	getSugarLogger().DPanic(args...)
 }
 
 func Panic(args ...interface{}) {
-	_globalS.Panic(args...)
+	getSugarLogger().Panic(args...)
 }
 
 func Fatal(args ...interface{}) {
-	_globalS.Fatal(args...)
+	getSugarLogger().Fatal(args...)
 }
 
 func Debugf(template string, args ...interface{}) {
-	_globalS.Debugf(template, args...)
+	getSugarLogger().Debugf(template, args...)
 }
 
 func Infof(template string, args ...interface{}) {
-	_globalS.Infof(template, args...)
+	getSugarLogger().Infof(template, args...)
 }
 
 func Warnf(template string, args ...interface{}) {
-	_globalS.Warnf(template, args...)
+	getSugarLogger().Warnf(template, args...)
 }
 
 func Errorf(template string, args ...interface{}) {
-	_globalS.Errorf(template, args...)
+	getSugarLogger().Errorf(template, args...)
 }
 
 func DPanicf(template string, args ...interface{}) {
-	_globalS.DPanicf(template, args...)
+	getSugarLogger().DPanicf(template, args...)
 }
 
 func Panicf(template string, args ...interface{}) {
-	_globalS.Panicf(template, args...)
+	getSugarLogger().Panicf(template, args...)
 }
 
 func Fatalf(template string, args ...interface{}) {
-	_globalS.Fatalf(template, args...)
+	getSugarLogger().Fatalf(template, args...)
 }
 
 func Debugw(msg string, keysAndValues ...interface{}) {
-	_globalS.Debugw(msg, keysAndValues...)
+	getSugarLogger().Debugw(msg, keysAndValues...)
 }
 
 func Infow(msg string, keysAndValues ...interface{}) {
-	_globalS.Infow(msg, keysAndValues...)
+	getSugarLogger().Infow(msg, keysAndValues...)
 }
 
 func Warnw(msg string, keysAndValues ...interface{}) {
-	_globalS.Warnw(msg, keysAndValues...)
+	getSugarLogger().Warnw(msg, keysAndValues...)
 }
 
 func Errorw(msg string, keysAndValues ...interface{}) {
-	_globalS.Errorw(msg, keysAndValues...)
+	getSugarLogger().Errorw(msg, keysAndValues...)
 }
 
 func DPanicw(msg string, keysAndValues ...interface{}) {
-	_globalS.DPanicw(msg, keysAndValues...)
+	getSugarLogger().DPanicw(msg, keysAndValues...)
 }
 
 func Panicw(msg string, keysAndValues ...interface{}) {
-	_globalS.Panicw(msg, keysAndValues...)
+	getSugarLogger().Panicw(msg, keysAndValues...)
 }
 
 func Fatalw(msg string, keysAndValues ...interface{}) {
-	_globalS.Fatalw(msg, keysAndValues...)
+	getSugarLogger().Fatalw(msg, keysAndValues...)
 }
 
 func Sync() error {
-	return _globalS.Sync()
+	return getSugarLogger().Sync()
 }

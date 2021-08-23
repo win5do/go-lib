@@ -2,8 +2,7 @@ package logx
 
 import (
 	"log"
-	"sync/atomic"
-	"unsafe"
+	"sync"
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -12,22 +11,32 @@ import (
 //go:generate sh -c "go run ./generator >zap_sugar_generated.go"
 
 var (
-	_globalL = NewLogger(zapcore.InfoLevel)
-	_globalS = _globalL.Sugar()
+	_globalMu = sync.RWMutex{}
+	_globalL  = NewLogger(zapcore.InfoLevel)
+	_globalS  = _globalL.Sugar()
 )
 
 const skip = 1
 
 func SetLogger(l *zap.Logger) {
-	lPtr := (*unsafe.Pointer)(unsafe.Pointer(&_globalL))
-	atomic.StorePointer(lPtr, unsafe.Pointer(l))
-	sPtr := (*unsafe.Pointer)(unsafe.Pointer(&_globalS))
-	atomic.StorePointer(sPtr, unsafe.Pointer(l.Sugar()))
+	_globalMu.Lock()
+	_globalL = l
+	_globalS = l.Sugar()
+	_globalMu.Unlock()
 }
 
 func GetLogger() *zap.Logger {
+	_globalMu.RLock()
 	l := _globalL
+	_globalMu.RUnlock()
 	return l.WithOptions(zap.AddCallerSkip(-skip)) // unwrap
+}
+
+func getSugarLogger() *zap.SugaredLogger {
+	_globalMu.RLock()
+	s := _globalS
+	_globalMu.RUnlock()
+	return s
 }
 
 func NewLogger(lv zapcore.Level) *zap.Logger {
