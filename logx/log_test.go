@@ -21,7 +21,7 @@ func TestLog(t *testing.T) {
 func TestDataRace(t *testing.T) {
 	go func() {
 		for {
-			log.Debug("debug")
+			log.Info("info")
 			time.Sleep(10 * time.Millisecond)
 		}
 	}()
